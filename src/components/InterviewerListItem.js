@@ -7,15 +7,16 @@ export default function InterviewerListItem(props) {
     "interviewers__item",
     {"interviewers__item--selected": props.selected}
   );
+  console.log("ivli props", props);
   return (
     <li className={interviewClasses}>
       <img
         className="interviewers__item-image"
-        src="https://i.imgur.com/LpaY82x.png"
-        alt="Sylvia Palmer"
+        src={props.src}
+        alt={props.name}
         onClick={() => props.setInterviewer(props.id)}
       />
-      Sylvia Palmer
+      {props.name}
     </li>
   );
 };
