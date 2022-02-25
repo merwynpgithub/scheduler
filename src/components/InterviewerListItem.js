@@ -13,6 +13,7 @@ export default function InterviewerListItem(props) {
         className="interviewers__item-image"
         src="https://i.imgur.com/LpaY82x.png"
         alt="Sylvia Palmer"
+        onClick={() => props.setInterviewer(props.id)}
       />
       Sylvia Palmer
     </li>
