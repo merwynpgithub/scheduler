@@ -147,11 +147,6 @@ storiesOf("Appointment", module)
   .add("Appointment with time", () => <Appointment time={"12pm"} />)
   .add("Header", () => <Header time={"12pm"} />)
   .add("Empty", () => <Empty onClick={action("onAdd")} />)
-
-storiesOf("Show", module)
-  .addParameters({
-    backgrounds: [{ name: "white", value: "#fff", default: true }]
-  })
   .add("Show", () => (
     <Show 
     onEdit={action("onEdit")}
