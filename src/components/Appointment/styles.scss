@@ -107,6 +107,10 @@ $appointment-height: 11rem;
     display: none;
   }
 
+  .appointment:last-of-type .appointment__add {
+    display: none;
+  }
+
   &__actions {
     margin-top: 1rem;
 

@@ -11,8 +11,12 @@ import Form from './Form';
 export default function Appointment(props) {
   return (
     <article className="appointment">
-      {!props.time && "No Appointements"}
-      {props.time && `Appointement at ${props.time}`}
+      {!props.time && "No Appointments"}
+      {props.time && `Appointment at ${props.time}`}
+      {!props.interview ? <Empty /> : <Show
+        student={props.interview.student}
+        interviewer={props.interview.interviewer}
+      />}
     </article>
   );
 }
