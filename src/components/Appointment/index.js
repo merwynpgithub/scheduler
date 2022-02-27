@@ -12,7 +12,7 @@ export default function Appointment(props) {
   return (
     <article className="appointment">
       {!props.time && "No Appointments"}
-      {props.time && `Appointment at ${props.time}`}
+      {props.time && <Header time={props.time} />}
       {!props.interview ? <Empty /> : <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer}
