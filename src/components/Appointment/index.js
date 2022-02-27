@@ -5,6 +5,7 @@ import Empty from './Empty';
 import Show from './Show';
 import Confirm from './Confirm';
 import Status from './Status';
+import Error from './Error';
 
 export default function Appointment(props) {
   return (
