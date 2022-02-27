@@ -180,3 +180,12 @@ storiesOf("Appointment", module)
       onConfirm={action("onConfirm")}
     />
   ))
+  .add("Edit", () => (
+    <Form
+      interviewers={interviewers}
+      interviewer={3}
+      student={"Andrew"}
+      onCancel={action("onCancel")}
+      onConfirm={action("onConfirm")}
+    />
+  ))
