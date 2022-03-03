@@ -6,7 +6,6 @@ export function getAppointmentsForDay(state, day) {
       appointmentList.forEach(i => {
         result.push(state.appointments[i]);
       })
-      return result;
     };
   })
   return result;
