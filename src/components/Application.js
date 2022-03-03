@@ -46,7 +46,7 @@ const appointments = {
 
 export default function Application(props) {
 
-  const setDay = day => setState(Object.assign({}, state, { day }));
+  const setDay = day => setState(prev => ({ ...prev, day }));
   const setDays = days => setState(prev => ({ ...prev, days }));;
   const [state, setState] = useState({
     day: "Monday",
