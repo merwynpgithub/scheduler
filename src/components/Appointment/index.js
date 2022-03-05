@@ -7,16 +7,26 @@ import Confirm from './Confirm';
 import Status from './Status';
 import Error from './Error';
 import Form from './Form';
+import useVisualMode from 'hooks/useVisualMode';
+
+const EMPTY = "EMPTY";
+const SHOW = "SHOW";
 
 export default function Appointment(props) {
+  const { mode, transition, back } = useVisualMode(
+    props.interview ? SHOW : EMPTY
+  );
   return (
     <article className="appointment">
       {!props.time && "No Appointments"}
       {props.time && <Header time={props.time} />}
-      {!props.interview ? <Empty /> : <Show
-        student={props.interview.student}
-        interviewer={props.interview.interviewer}
-      />}
+      {mode === EMPTY && <Empty onAdd={() => console.log("Clicked onAdd")} />}
+      {mode === SHOW && (
+        <Show
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
+        />
+      )}
     </article>
   );
 }
