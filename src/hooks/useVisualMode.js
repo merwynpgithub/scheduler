@@ -16,7 +16,7 @@ export default function useVisualMode(initial) {
   const back = () => {
     setHistory(prev => {
       const newChange = prev;
-      newChange.pop();
+      if (newChange.length >= 2) newChange.pop();
       setHistory(newChange);
     })
     if (history.length >= 2) {
