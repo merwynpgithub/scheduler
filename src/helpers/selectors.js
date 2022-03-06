@@ -16,3 +16,16 @@ export function getInterview(state, interview) {
   const interviewerId = interview.interviewer;
   return {...interview, interviewer: state.interviewers[interviewerId]};
 };
+
+export function getInterviewersForDay(state, day) {
+  let result = [];
+  state.days.forEach(item => {
+    if (item.name === day) {
+      const interviewerList = item.interviewers || [];
+      interviewerList.forEach(i => {
+        result.push(state.interviewers[i]);
+      })
+    };
+  })
+  return result;
+};
