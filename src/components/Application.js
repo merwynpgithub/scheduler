@@ -24,9 +24,15 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    setState(prev => {
-      return {...prev, appointments };
-    })
+    return axios.put(`/api/appointments/${id}`, {interview})
+    .then(res => {
+      console.log(res);
+      if (res.status === 204) {
+        setState(prev => {
+          return {...prev, appointments };
+        });
+      }
+    }); 
   }
 
   useEffect(() => {
