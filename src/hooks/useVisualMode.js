@@ -9,7 +9,7 @@ export default function useVisualMode(initial) {
       setHistory(prev => {
         const prevChange = prev;
         prevChange.push(next);
-        setHistory(prevChange);
+        return prevChange;
       });
     }
     setMode(next);
