@@ -14,9 +14,7 @@ export default function useVisualMode(initial) {
     } else {
       setHistory(prev => {
         const prevChange = [...prev];
-        console.log("before", prevChange);
         prevChange[prevChange.length - 1] = next;
-        console.log("after", prevChange);
         return prevChange;
       });
     }
