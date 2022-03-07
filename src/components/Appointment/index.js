@@ -15,6 +15,7 @@ const CREATE = "CREATE";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
@@ -28,16 +29,16 @@ export default function Appointment(props) {
     };
     transition(SAVING);
     props.bookInterview(props.id, interview).then(() => {
-        transition(SHOW);
-      });
+      transition(SHOW);
+    });
   }
 
   function delInterview() {
     transition(DELETING);
     props.cancelInterview(props.id)
-    .then(() => {
-      transition(EMPTY);
-    });
+      .then(() => {
+        transition(EMPTY);
+      });
   }
 
   return (
@@ -49,7 +50,8 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
-          onConfirm= {() => transition(CONFIRM)}
+          onConfirm={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
         />
       )}
       {mode === CREATE && (
@@ -60,14 +62,24 @@ export default function Appointment(props) {
           onSave={save}
         />
       )}
-      {mode === SAVING && <Status message={SAVING}/>}
-      {mode === DELETING && <Status message={DELETING}/>}
+      {mode === SAVING && <Status message={SAVING} />}
+      {mode === DELETING && <Status message={DELETING} />}
       {mode === CONFIRM && (
-      <Confirm
-        message={"Delete the Appointment?"}
-        onConfirm={delInterview}
-        onCancel={() => transition(SHOW)}
-      />)}
+        <Confirm
+          message={"Delete the Appointment?"}
+          onConfirm={delInterview}
+          onCancel={() => transition(SHOW)}
+        />)}
+      {mode === EDIT && (
+        <Form
+          interview={props.interview}
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.id}
+          interviewers={props.interviewers}
+          onCancel={() => transition(SHOW)}
+          onSave={save}
+        />
+      )}
     </article>
   );
 }
