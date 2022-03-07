@@ -2,69 +2,17 @@ import React, { useState, useEffect } from "react";
 import Appointment from "./Appointment";
 import DayList from "./DayList";
 import "components/Application.scss";
-import axios from "axios";
+import useApplicationData from "hooks/useApplicationData";
 
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 export default function Application(props) {
-  const setDay = day => setState(prev => ({ ...prev, day }));
-
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {}
-  });
-
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    return axios.put(`/api/appointments/${id}`, {interview})
-    .then(res => {
-      console.log(res);
-      if (res.status === 204) {
-        setState(prev => {
-          return {...prev, appointments };
-        });
-      }
-    }); 
-  }
-
-  function cancelInterview(id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    return axios.delete(`/api/appointments/${id}`)
-    .then(res => {
-      console.log(res);
-      setState(prev => {
-        return {...prev, appointments };
-      });
-    })
-  }
-
-  useEffect(() => {
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers")
-    ]).then(all => {
-      const days = all[0].data;
-      const appointments = all[1].data;
-      const interviewers = all[2].data;
-      setState(prev => ({ ...prev, days, appointments, interviewers }));
-    })
-  }, []);
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
 
   const interviewerList = getInterviewersForDay(state, state.day);
   const dailyAppointments = getAppointmentsForDay(state, state.day);
