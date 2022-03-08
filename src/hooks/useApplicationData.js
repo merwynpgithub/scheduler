@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
@@ -9,8 +9,6 @@ export default function useApplicationData() {
     days: [],
     appointments: {}
   });
-
-  const [spots, setSpots] = useState(0);
 
   function bookInterview(id, interview) {
     const appointment = {
@@ -25,10 +23,9 @@ export default function useApplicationData() {
     .then(res => {
       if (res.status === 204) {
         setState(prev => {
-          return {...prev, appointments };
+          return {...prev, appointments, spots: prev.spots + 1 };
         });
-        setSpots(prev => prev + 1);
-      console.log("Updated spots after book are:", spots);
+      console.log("Updated spots after book are:", state.spots);
       }
     }); 
   }
@@ -45,10 +42,9 @@ export default function useApplicationData() {
     return axios.delete(`/api/appointments/${id}`)
     .then(res => {
       setState(prev => {
-        return {...prev, appointments };
+        return {...prev, appointments, spots: prev.spots - 1 };
       });
-      setSpots(prev => prev - 1);
-      console.log("Updated spots after cancel are:", spots);
+      console.log("Updated spots after cancel are:", state.spots);
     })
   }
 
@@ -61,11 +57,9 @@ export default function useApplicationData() {
       const days = all[0].data;
       const appointments = all[1].data;
       const interviewers = all[2].data;
-      setState(prev => ({ ...prev, days, appointments, interviewers }));
       const spotInUse = days.reduce((acc, val) => acc + val.spots, 0);
-      const emptySpots = 25 - spotInUse;
-      console.log("emptyspots", emptySpots);
-      setSpots(emptySpots);
+      const spots = 25 - spotInUse;
+      setState(prev => ({ ...prev, days, appointments, interviewers, spots }));
       console.log("First render spots:", spots);
     })
   }, []);
