@@ -10,6 +10,8 @@ export default function useApplicationData() {
     appointments: {}
   });
 
+  const [spots, setSpots] = useState(0);
+
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -25,6 +27,8 @@ export default function useApplicationData() {
         setState(prev => {
           return {...prev, appointments };
         });
+        setSpots(prev => prev + 1);
+      console.log("Updated spots after book are:", spots);
       }
     }); 
   }
@@ -43,6 +47,8 @@ export default function useApplicationData() {
       setState(prev => {
         return {...prev, appointments };
       });
+      setSpots(prev => prev - 1);
+      console.log("Updated spots after cancel are:", spots);
     })
   }
 
@@ -56,6 +62,11 @@ export default function useApplicationData() {
       const appointments = all[1].data;
       const interviewers = all[2].data;
       setState(prev => ({ ...prev, days, appointments, interviewers }));
+      const spotInUse = days.reduce((acc, val) => acc + val.spots, 0);
+      const emptySpots = 25 - spotInUse;
+      console.log("emptyspots", emptySpots);
+      setSpots(emptySpots);
+      console.log("First render spots:", spots);
     })
   }, []);
 
