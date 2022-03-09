@@ -1,14 +1,42 @@
-import { useState, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
-  const setDay = day => setState(prev => ({ ...prev, day }));
+  const SET_DAY = "SET_DAY";
+  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+  const SET_INTERVIEW = "BOOK_INTERVIEW";
 
-  const [state, setState] = useState({
+  const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {}
   });
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case SET_DAY: {
+        const day = action.day;
+        return { ...state, day };
+      }
+      case SET_APPLICATION_DATA: {
+        const days = action.days;
+        const appointments = action.appointments;
+        const interviewers = action.interviewers;
+        return { ...state, days, appointments, interviewers };
+      }
+      case SET_INTERVIEW: {
+        const days = action.days;
+        const appointments = action.appointments;
+        return { ...state, appointments, days };
+      }
+      default:
+        throw new Error(
+          `Tried to reduce with unsupported action type: ${action.type}`
+        );
+    }
+  }
+
+  const setDay = day => dispatch({ type: SET_DAY, day: day });
 
   function bookInterview(id, interview) {
     const appointment = {
@@ -23,11 +51,9 @@ export default function useApplicationData() {
       .then(res => {
         if (res.status === 204) {
           const index = Math.floor((id - 1) / 5);
-          setState(prev => {
-            const dayCopy = [...prev.days];
-            dayCopy[index].spots -= 1;
-            return { ...prev, appointments, days: dayCopy };
-          });
+          const dayCopy = [...state.days];
+          dayCopy[index].spots -= 1;
+          dispatch({ type: SET_INTERVIEW, appointments, days: dayCopy });
         }
       });
   }
@@ -44,11 +70,9 @@ export default function useApplicationData() {
     return axios.delete(`/api/appointments/${id}`)
       .then(res => {
         const index = Math.floor((id - 1) / 5);
-        setState(prev => {
-          const dayCopy = [...prev.days];
-          dayCopy[index].spots += 1;
-          return { ...prev, appointments, days: dayCopy };
-        });
+        const dayCopy = [...state.days];
+        dayCopy[index].spots += 1;
+        dispatch({ type: SET_INTERVIEW, appointments, days: dayCopy });
       })
   }
 
@@ -61,7 +85,7 @@ export default function useApplicationData() {
       const days = all[0].data;
       const appointments = all[1].data;
       const interviewers = all[2].data;
-      setState(prev => ({ ...prev, days, appointments, interviewers }));
+      dispatch({ type: SET_APPLICATION_DATA, days: days, appointments: appointments, interviewers: interviewers });
     })
   }, []);
 
