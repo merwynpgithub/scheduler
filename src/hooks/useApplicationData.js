@@ -19,15 +19,17 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    return axios.put(`/api/appointments/${id}`, {interview})
-    .then(res => {
-      if (res.status === 204) {
-        setState(prev => {
-          return {...prev, appointments, spots: prev.spots + 1 };
-        });
-      console.log("Updated spots after book are:", state.spots);
-      }
-    }); 
+    return axios.put(`/api/appointments/${id}`, { interview })
+      .then(res => {
+        if (res.status === 204) {
+          const index = Math.floor((id - 1) / 5);
+          setState(prev => {
+            const dayCopy = [...prev.days];
+            dayCopy[index].spots -= 1;
+            return { ...prev, appointments, days: dayCopy };
+          });
+        }
+      });
   }
 
   function cancelInterview(id) {
@@ -40,12 +42,14 @@ export default function useApplicationData() {
       [id]: appointment
     };
     return axios.delete(`/api/appointments/${id}`)
-    .then(res => {
-      setState(prev => {
-        return {...prev, appointments, spots: prev.spots - 1 };
-      });
-      console.log("Updated spots after cancel are:", state.spots);
-    })
+      .then(res => {
+        const index = Math.floor((id - 1) / 5);
+        setState(prev => {
+          const dayCopy = [...prev.days];
+          dayCopy[index].spots += 1;
+          return { ...prev, appointments, days: dayCopy };
+        });
+      })
   }
 
   useEffect(() => {
@@ -57,14 +61,11 @@ export default function useApplicationData() {
       const days = all[0].data;
       const appointments = all[1].data;
       const interviewers = all[2].data;
-      const spotInUse = days.reduce((acc, val) => acc + val.spots, 0);
-      const spots = 25 - spotInUse;
-      setState(prev => ({ ...prev, days, appointments, interviewers, spots }));
-      console.log("First render spots:", spots);
+      setState(prev => ({ ...prev, days, appointments, interviewers }));
     })
   }, []);
 
-  return { 
+  return {
     state,
     setDay,
     bookInterview,
