@@ -23,5 +23,5 @@ npm run storybook
 ```
 
 ## Screenshots
-![Scheduler](public/images/scheduler.gif)
+![Scheduler](src/images/scheduler.gif)
 
