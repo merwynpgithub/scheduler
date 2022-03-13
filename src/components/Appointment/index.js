@@ -22,7 +22,7 @@ const ERROR_INCOMPLETE_STUDENT = "ERROR_INCOMPLETE_STUDENT";
 const ERROR_INCOMPLETE_INTERVIEWER = "ERROR_INCOMPLETE_INTERVIEWER";
 
 export default function Appointment(props) {
-  const { mode, transition, back } = useVisualMode(
+  const { mode, transition, back, history } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
@@ -38,7 +38,11 @@ export default function Appointment(props) {
     }
     else {
       transition(SAVING);
-      props.bookInterview(props.id, interview)
+      let editInterview = false;
+      if (history[history.length - 1] === "EDIT") {
+        editInterview = true;
+      }
+      props.bookInterview(props.id, interview, editInterview)
       .then(() => transition(SHOW))
       .catch(error => transition(ERROR_SAVE, true));
     }

@@ -38,7 +38,7 @@ export default function useApplicationData() {
 
   const setDay = day => dispatch({ type: SET_DAY, day: day });
 
-  function bookInterview(id, interview) {
+  function bookInterview(id, interview, editInterview) {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -52,7 +52,9 @@ export default function useApplicationData() {
         if (res.status === 204) {
           const index = Math.floor((id - 1) / 5);
           const dayCopy = [...state.days];
-          dayCopy[index].spots -= 1;
+          if (!editInterview) {
+            dayCopy[index].spots -= 1;
+          }
           dispatch({ type: SET_INTERVIEW, appointments, days: dayCopy });
         }
       });
