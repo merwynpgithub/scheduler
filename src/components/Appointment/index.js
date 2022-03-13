@@ -17,6 +17,9 @@ const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
 const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_CANCEL = "ERROR_CANCEL";
+const ERROR_INCOMPLETE_STUDENT = "ERROR_INCOMPLETE_STUDENT";
+const ERROR_INCOMPLETE_INTERVIEWER = "ERROR_INCOMPLETE_INTERVIEWER";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
@@ -28,17 +31,24 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    transition(SAVING);
-    props.bookInterview(props.id, interview)
-    .then(() => transition(SHOW))
-    .catch(error => transition(ERROR_SAVE, true));
+    if (!name) {
+      transition(ERROR_INCOMPLETE_STUDENT);
+    } else if (!interviewer) {
+      transition(ERROR_INCOMPLETE_INTERVIEWER);
+    }
+    else {
+      transition(SAVING);
+      props.bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true));
+    }
   }
 
   function delInterview() {
     transition(DELETING, true);
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
-      .catch(error => transition(ERROR_SAVE, true));
+      .catch(error => transition(ERROR_CANCEL, true));
   }
 
   return (
@@ -82,7 +92,25 @@ export default function Appointment(props) {
       )}
       {mode === ERROR_SAVE && (
         <Error 
+          message="Could not save the appointment."
+          onClose={() => transition(EMPTY)}
+        />
+      )}
+      {mode === ERROR_CANCEL && (
+        <Error 
           message="Could not cancel the appointment."
+          onClose={() => back()}
+        />
+      )}
+      {mode === ERROR_INCOMPLETE_STUDENT && (
+        <Error 
+          message="Please enter student name."
+          onClose={() => back()}
+        />
+      )}
+      {mode === ERROR_INCOMPLETE_INTERVIEWER && (
+        <Error 
+          message="Please select Interviewer."
           onClose={() => back()}
         />
       )}
