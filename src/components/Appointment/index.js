@@ -18,8 +18,7 @@ const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
 const ERROR_SAVE = "ERROR_SAVE";
 const ERROR_CANCEL = "ERROR_CANCEL";
-const ERROR_INCOMPLETE_STUDENT = "ERROR_INCOMPLETE_STUDENT";
-const ERROR_INCOMPLETE_INTERVIEWER = "ERROR_INCOMPLETE_INTERVIEWER";
+const ERROR_INCOMPLETE = "ERROR_INCOMPLETE";
 
 export default function Appointment(props) {
   const { mode, transition, back, history } = useVisualMode(
@@ -31,12 +30,9 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    if (!name) {
-      transition(ERROR_INCOMPLETE_STUDENT);
-    } else if (!interviewer) {
-      transition(ERROR_INCOMPLETE_INTERVIEWER);
-    }
-    else {
+    if (!name || !interviewer) {
+      transition(ERROR_INCOMPLETE);
+    } else {
       transition(SAVING);
       let editInterview = false;
       if (history[history.length - 1] === "EDIT") {
@@ -106,18 +102,13 @@ export default function Appointment(props) {
           onClose={() => back()}
         />
       )}
-      {mode === ERROR_INCOMPLETE_STUDENT && (
+      {mode === ERROR_INCOMPLETE && (
         <Error 
-          message="Please enter student name."
+          message="Incomplete form. Please enter student name and select interviewer."
           onClose={() => back()}
         />
       )}
-      {mode === ERROR_INCOMPLETE_INTERVIEWER && (
-        <Error 
-          message="Please select Interviewer."
-          onClose={() => back()}
-        />
-      )}
+      
     </article>
   );
 }
