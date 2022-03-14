@@ -1,6 +1,12 @@
 # Interview Scheduler
 
-## Setup
+## Clone and run the scheduler api which which contains the database
+
+Clone the repository: ` git clone https://github.com/merwynpgithub/scheduler-api`
+<br />
+Follow the readme directions of the repo and run `npm start` in the scheduler api directory
+
+## Setup for Scheduler APP
 
 Install dependencies with `npm install`.
 
@@ -21,7 +27,6 @@ npm test
 ```sh
 npm run storybook
 ```
-
 ## Screenshots
 ![Scheduler](src/images/scheduler.gif)
 
