@@ -9,6 +9,7 @@ import Error from './Error';
 import Form from './Form';
 import useVisualMode from 'hooks/useVisualMode';
 
+//Defining all visualMode states
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -25,6 +26,11 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+  /**
+   * Book a new appointment or edit an existing one
+   * @param {*} name 
+   * @param {*} interviewer object
+   */
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -39,11 +45,14 @@ export default function Appointment(props) {
         editInterview = true;
       }
       props.bookInterview(props.id, interview, editInterview)
-      .then(() => transition(SHOW))
-      .catch(error => transition(ERROR_SAVE, true));
+        .then(() => transition(SHOW))
+        .catch(error => transition(ERROR_SAVE, true));
     }
   }
 
+  /**
+   * cancel an existing appointment
+   */
   function delInterview() {
     transition(DELETING, true);
     props.cancelInterview(props.id)
@@ -55,15 +64,11 @@ export default function Appointment(props) {
     <article className="appointment">
       {!props.time && "No Appointments"}
       {props.time && <Header time={props.time} />}
+      
+      {/* Initial mode when no appointment */}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && (
-        <Show
-          student={props.interview.student}
-          interviewer={props.interview.interviewer}
-          onConfirm={() => transition(CONFIRM)}
-          onEdit={() => transition(EDIT)}
-        />
-      )}
+
+      {/* mode when booking appointment */}
       {mode === CREATE && (
         <Form
           interview={props.interview}
@@ -72,14 +77,31 @@ export default function Appointment(props) {
           onSave={save}
         />
       )}
+      {/* mode while saving appointment and sceduler api updates*/}
       {mode === SAVING && <Status message={SAVING} />}
+
+      {/* mode when appointment is booked */}
+      {mode === SHOW && (
+        <Show
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
+          onConfirm={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
+        />
+      )}
+
+      {/* mode while canceling appointment and sceduler api updates*/}
       {mode === DELETING && <Status message={DELETING} />}
+
+      {/* mode to confirm cancellation */}
       {mode === CONFIRM && (
         <Confirm
           message={"Delete the Appointment?"}
           onConfirm={delInterview}
           onCancel={() => back()}
         />)}
+      
+      {/* mode while editing appointment */}
       {mode === EDIT && (
         <Form
           interview={props.interview}
@@ -90,25 +112,31 @@ export default function Appointment(props) {
           onSave={save}
         />
       )}
+
+      {/* mode if scheduler api is unable to book appointment */}
       {mode === ERROR_SAVE && (
-        <Error 
+        <Error
           message="Could not save the appointment."
           onClose={() => transition(EMPTY)}
         />
       )}
+
+      {/* mode if scheduler api is unable to cancel appointment */}
       {mode === ERROR_CANCEL && (
-        <Error 
+        <Error
           message="Could not cancel the appointment."
           onClose={() => back()}
         />
       )}
+
+      {/* mode if user tries to book appointemt without both name and interviewer */}
       {mode === ERROR_INCOMPLETE && (
-        <Error 
+        <Error
           message="Incomplete form. Please enter student name and select interviewer."
           onClose={() => back()}
         />
       )}
-      
+
     </article>
   );
 }

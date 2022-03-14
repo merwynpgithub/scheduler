@@ -36,8 +36,19 @@ export default function useApplicationData() {
     }
   }
 
+/**
+ * @param {*} day 
+ * @returns state object with day
+ */
   const setDay = day => dispatch({ type: SET_DAY, day: day });
 
+/**
+ * book a new interview or edit an existing one
+ * @param {*} id 
+ * @param {*} interview object
+ * @param {*} editInterview (boolean value default false if new booking)
+ * @returns Promise axios which updates scheduler api
+ */
   function bookInterview(id, interview, editInterview) {
     const appointment = {
       ...state.appointments[id],
@@ -60,6 +71,11 @@ export default function useApplicationData() {
       });
   }
 
+  /**
+   * cancel interview
+   * @param {*} id 
+   * @returns Promise axios which updates scheduler api
+   */
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],

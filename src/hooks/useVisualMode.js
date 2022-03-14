@@ -1,9 +1,25 @@
 import { useState } from 'react';
 
+/**
+ * useVisualMode updates visualMode state and history for scheduler UI
+ * @param {*} initial 
+ * @returns object with mode and history state, transition and back function
+ */
 export default function useVisualMode(initial) {
+  //set up initial mode
   const [mode, setMode] = useState(initial);
+  //maintain mode history in an array
   const [history, setHistory] = useState([initial]);
 
+  /**
+   * 
+   * @param {*} next 
+   * @param {*} replace
+   * default replace = false, mode = ['EMPTY'], next = 'CREATE'
+   * history = ['EMPTY', 'CREATE']
+   * replace = true, mode = ['EMPTY', 'CREATE'], next = 'DELETING'
+   * history = ['EMPTY', 'DELETING']
+   */
   const transition = (next, replace = false) => {
     if (!replace) {
       setHistory(prev => {
@@ -21,6 +37,9 @@ export default function useVisualMode(initial) {
     setMode(next);
   }
 
+  /** 
+   * back function updates mode value to previous state
+   */
   const back = () => {
     setHistory(prev => {
       const newChange = [...prev];
