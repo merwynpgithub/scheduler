@@ -1,6 +1,10 @@
 import { useEffect, useReducer } from "react";
 import axios from "axios";
 
+/**
+ * useApplicationData is custom hook
+ * @returns object with updated state object, setDay, bookInterview and cancelInterview functions
+ */
 export default function useApplicationData() {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
