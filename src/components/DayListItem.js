@@ -20,7 +20,7 @@ export default function DayListItem(props) {
   const h3Text = formatSpots(props.spots);
 
   return (
-    <li className={dayItemClass} onClick={() => {props.setDay(props.name)}}>
+    <li className={dayItemClass} onClick={() => {props.setDay(props.name)}} data-testid="day">
       <h2 className="text--regular"
         selected={props.selected}
       >
