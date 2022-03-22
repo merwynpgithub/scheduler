@@ -71,26 +71,26 @@ describe("Application", () => {
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
     // 3. Click the "Delete" button on the booked appointment.
-  const appointment = getAllByTestId(container, "appointment").find(
-    appointment => queryByText(appointment, "Archie Cohen")
-  );
-  // console.log("App is ", prettyDOM(appointment));
-  // console.log("App is ", prettyDOM(container));
-  fireEvent.click(queryByAltText(appointment, "Delete"));
-  // 4. Check that the confirmation message is shown.
-  expect(getByText(appointment, "Delete the Appointment?")).toBeInTheDocument();
-  // 5. Click the "Confirm" button on the confirmation.
-  fireEvent.click(queryByText(appointment, "Confirm"));
-  // 6. Check that the element with the text "Deleting" is displayed.
-  expect(getByText(appointment, "DELETING")).toBeInTheDocument();
-   // 7. Wait until the element with the "Add" button is displayed.
-   await waitForElement(() => getByAltText(appointment, "Add"));
-   // 8. Check that the DayListItem with the text "Monday" also has the text "2 spots remaining".
-  const day = getAllByTestId(container, "day").find(day =>
-    queryByText(day, "Monday")
-  );
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen")
+    );
+    // console.log("App is ", prettyDOM(appointment));
+    // console.log("App is ", prettyDOM(container));
+    fireEvent.click(queryByAltText(appointment, "Delete"));
+    // 4. Check that the confirmation message is shown.
+    expect(getByText(appointment, "Delete the Appointment?")).toBeInTheDocument();
+    // 5. Click the "Confirm" button on the confirmation.
+    fireEvent.click(queryByText(appointment, "Confirm"));
+    // 6. Check that the element with the text "Deleting" is displayed.
+    expect(getByText(appointment, "DELETING")).toBeInTheDocument();
+    // 7. Wait until the element with the "Add" button is displayed.
+    await waitForElement(() => getByAltText(appointment, "Add"));
+    // 8. Check that the DayListItem with the text "Monday" also has the text "2 spots remaining".
+    const day = getAllByTestId(container, "day").find(day =>
+      queryByText(day, "Monday")
+    );
 
-  expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
+    expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
 
   });
 });

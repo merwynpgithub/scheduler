@@ -4,7 +4,7 @@
 
 Clone the repository: ` git clone https://github.com/merwynpgithub/scheduler-api`
 <br />
-Follow the readme directions of the repo and run `npm start` in the scheduler api directory
+Follow the readme directions of the repo, set up the database and run `npm start` in the scheduler api directory
 
 ## Setup for Scheduler APP
 
@@ -28,5 +28,7 @@ npm test
 npm run storybook
 ```
 ## Screenshots
-![Scheduler](src/images/scheduler.gif)
+![Scheduler Error](src/images/ezgif-1-scheduler.gif)
+![Scheduler Add Appointment](src/images/ezgif-2-scheduler.gif)
+![Scheduler Cancel Appointment](src/images/ezgif-3-scheduler.gif)
 
