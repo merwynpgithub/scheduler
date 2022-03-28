@@ -40,19 +40,19 @@ export default function useApplicationData() {
     }
   }
 
-/**
- * @param {*} day 
- * @returns state object with day
- */
+  /**
+   * @param {*} day 
+   * @returns state object with day
+   */
   const setDay = day => dispatch({ type: SET_DAY, day: day });
 
-/**
- * book a new interview or edit an existing one
- * @param {*} id 
- * @param {*} interview object
- * @param {*} editInterview (boolean value default false if new booking)
- * @returns Promise axios which updates scheduler api
- */
+  /**
+   * book a new interview or edit an existing one
+   * @param {*} id 
+   * @param {*} interview object
+   * @param {*} editInterview (boolean value default false if new booking)
+   * @returns Promise axios which updates scheduler api
+   */
   function bookInterview(id, interview, editInterview) {
     const appointment = {
       ...state.appointments[id],
@@ -99,16 +99,41 @@ export default function useApplicationData() {
   }
 
   useEffect(() => {
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers")
-    ]).then(all => {
-      const days = all[0].data;
-      const appointments = all[1].data;
-      const interviewers = all[2].data;
-      dispatch({ type: SET_APPLICATION_DATA, days, appointments, interviewers });
-    })
+    const getData = () => {
+      //fetch data from scheduler-api
+      Promise.all([
+        axios.get("/api/days"),
+        axios.get("/api/appointments"),
+        axios.get("/api/interviewers")
+      ]).then(all => {
+        const days = all[0].data;
+        const appointments = all[1].data;
+        const interviewers = all[2].data;
+        dispatch({ type: SET_APPLICATION_DATA, days, appointments, interviewers });
+      });
+    }
+    getData();
+
+    
+    //Create a websocket
+    const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL, "protocolOne");
+
+    //send webSocket message
+    socket.onopen = function (event) {
+      socket.send("ping");
+    };
+
+    //listen to message
+    socket.onmessage = function (event) {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "SET_INTERVIEW") {
+        console.log("message received", msg)
+
+        //fetch data
+        getData();
+      };
+    }
+
   }, []);
 
   return {

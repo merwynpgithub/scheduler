@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "components/Appointment/styles.scss";
 import Header from './Header';
 import Empty from './Empty';
@@ -25,6 +25,10 @@ export default function Appointment(props) {
   const { mode, transition, back, history } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
+
+  useEffect(() => {
+    transition(props.interview ? SHOW : EMPTY)
+  }, [props.interview]);
 
   /**
    * Book a new appointment or edit an existing one
@@ -81,7 +85,7 @@ export default function Appointment(props) {
       {mode === SAVING && <Status message={SAVING} />}
 
       {/* mode when appointment is booked */}
-      {mode === SHOW && (
+      {mode === SHOW && props.interview && (
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
