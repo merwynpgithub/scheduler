@@ -31,7 +31,7 @@ npm run storybook
 ### Scheduler Error
 ![Scheduler Error](src/images/ezgif-1-scheduler.gif)
 ### Scheduler Add Appointment
-![Scheduler Add Appointment](src/images/ezgif-2-scheduler.gif)
+![Scheduler Add Appointment](src/images/Screen-Recording-2.gif)
 ### Scheduler Cancel Appointment
 ![Scheduler Cancel Appointment](src/images/ezgif-3-scheduler.gif)
 
