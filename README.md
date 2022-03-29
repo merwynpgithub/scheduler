@@ -34,4 +34,6 @@ npm run storybook
 ![Scheduler Add Appointment](src/images/Screen-Recording-2.gif)
 ### Scheduler Cancel Appointment
 ![Scheduler Cancel Appointment](src/images/ezgif-3-scheduler.gif)
+### Scheduler Update with WebSockets
+![Scheduler Update with WebSockets](src/images/Screen-Recording-4.gif)
 
