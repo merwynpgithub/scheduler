@@ -37,3 +37,5 @@ npm run storybook
 ### Scheduler Update with WebSockets
 ![Scheduler Update with WebSockets](src/images/Screen-Recording-4.gif)
 
+## Dependencies used:
+Express, React, Nodemon, Storybook
