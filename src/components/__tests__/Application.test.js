@@ -8,10 +8,6 @@ afterEach(cleanup);
 
 describe("Application", () => {
   /*
-  it("renders without crashing", () => {
-    render(<Application />);
-  });
-  
   //old way: return asynchronous promise type
   it("defaults to Monday and changes the schedule when a new day is selected", () => {
     const { getByText } = render(<Application />);
